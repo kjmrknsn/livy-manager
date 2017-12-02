@@ -1,0 +1,14 @@
+[package]
+name = "livy_manager"
+version = "0.0.0"
+authors = ["Keiji Yoshida <kjmrknsn@gmail.com>"]
+description = "Livy Manager - Web UI for Managing Apache Livy Sessions"
+license = "MIT/Apache-2.0"
+homepage = "https://crates.io/crates/livy_manager"
+repository = "https://github.com/kjmrknsn/livy-manager"
+documentation = "https://docs.rs/livy_manager"
+readme = "README.md"
+keywords = ["livy", "livy-manager"]
+categories = ["web-programming::http-server"]
+
+[dependencies]

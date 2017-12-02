@@ -11,4 +11,8 @@ readme = "README.md"
 keywords = ["livy", "livy-manager"]
 categories = ["web-programming::http-server"]
 
+[badges]
+codecov = { repository = "kjmrknsn/livy-manager", branch = "master", service = "github" }
+travis-ci = { repository = "kjmrknsn/livy-manager", branch = "master" }
+
 [dependencies]

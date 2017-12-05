@@ -182,7 +182,7 @@ dependencies = [
 
 [[package]]
 name = "livy"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "curl 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -198,9 +198,10 @@ dependencies = [
  "argparse 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "hyper 0.11.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "livy 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "livy 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.23 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.23 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -554,7 +555,7 @@ dependencies = [
 "checksum lazycell 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3b585b7a6811fb03aa10e74b278a0f00f8dd9b45dc681f148bb29fa5cb61859b"
 "checksum libc 0.2.34 (registry+https://github.com/rust-lang/crates.io-index)" = "36fbc8a8929c632868295d0178dd8f63fc423fd7537ad0738372bd010b3ac9b0"
 "checksum libz-sys 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)" = "87f737ad6cc6fd6eefe3d9dc5412f1573865bded441300904d2f42269e140f16"
-"checksum livy 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e9775c8d14f62a04780ea948463631039b1155ffcdeeedd9d5eca647dc944ab6"
+"checksum livy 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "cc64b51532a5fb7317799c72c3e1ea8ebae1b3d2903ffc0bbb67b018955dad5e"
 "checksum log 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)" = "880f77541efa6e5cc74e76910c9884d9859683118839d6a1dc3b11e63512565b"
 "checksum mime 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e2e00e17be181010a91dbfefb01660b17311059dc8c7f48b9017677721e732bd"
 "checksum mio 0.6.11 (registry+https://github.com/rust-lang/crates.io-index)" = "0e8411968194c7b139e9105bc4ae7db0bae232af087147e72f0616ebf5fdb9cb"

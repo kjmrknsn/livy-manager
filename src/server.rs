@@ -12,7 +12,7 @@ pub fn run() {
     }
 
     let conf = Config::from(&args.conf_path);
-    println!("{:?}", conf);
+
     let addr = conf.http.addr.parse().unwrap();
     let server = Http::new()
         .bind(&addr, move || Ok(LivyManager::new(conf.clone())))

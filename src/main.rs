@@ -1,3 +1,8 @@
+extern crate livy_manager;
+
+use livy_manager::server;
+use std::env;
+
 fn main() {
-    println!("Hello, world!");
+    server::run(env::args()).unwrap()
 }

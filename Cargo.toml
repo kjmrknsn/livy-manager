@@ -16,3 +16,6 @@ codecov = { repository = "kjmrknsn/livy-manager", branch = "master", service = "
 travis-ci = { repository = "kjmrknsn/livy-manager", branch = "master" }
 
 [dependencies]
+futures = "0.1"
+hyper = "0.11"
+toml = "0.4"

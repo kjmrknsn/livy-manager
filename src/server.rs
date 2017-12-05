@@ -17,5 +17,9 @@ pub fn run() {
     let server = Http::new()
         .bind(&addr, move || Ok(LivyManager::new(conf.clone())))
         .unwrap();
+
+    eprintln!("Livy Manager {}", env!("CARGO_PKG_VERSION"));
+    eprintln!("Listening on {}.", addr);
+
     server.run().unwrap();
 }

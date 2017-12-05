@@ -6,7 +6,7 @@ use futures::future::Future;
 use hyper;
 use hyper::{Body, Chunk, Headers, Method, StatusCode};
 use hyper::server::{Request, Response, Service};
-use livy::v0_4_0::{Client, Session};
+use livy::v0_4_0::Client;
 use serde_json;
 
 type LivyManagerResponse = Response<Box<Stream<Item=Chunk, Error=hyper::Error>>>;
@@ -16,7 +16,6 @@ type LivyManagerResult = Result<LivyManagerResponse, String>;
 /// Livy Manager
 pub struct LivyManager {
     client: Client,
-    conf: Config
 }
 
 impl LivyManager {
@@ -30,7 +29,6 @@ impl LivyManager {
 
         LivyManager {
             client,
-            conf,
         }
     }
 }
@@ -49,6 +47,10 @@ impl Service for LivyManager {
             (&Method::Get, "/api/sessions") => {
                 get_sessions(&req, &self.client)
             }
+            (&Method::Get, "/api/kill_session") => {
+                println!("{:?}", req.query());
+                Ok(Response::new().with_status(StatusCode::InternalServerError))
+            }
             _ => {
                 not_found(&req)
             }
@@ -66,13 +68,13 @@ impl Service for LivyManager {
     }
 }
 
-fn index(req: &Request) -> LivyManagerResult {
+fn index(_: &Request) -> LivyManagerResult {
     let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from(INDEX));
 
     Ok(Response::new().with_headers(html_headers()).with_body(body))
 }
 
-fn get_sessions(req: &Request, client: &Client) -> LivyManagerResult {
+fn get_sessions(_: &Request, client: &Client) -> LivyManagerResult {
     let sessions = match client.get_sessions(None, None) {
         Ok(result) => result,
         Err(err) => return Err(format!("{}", err)),

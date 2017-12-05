@@ -13,6 +13,8 @@ extern crate toml;
 pub mod cmd_args;
 /// Configuration for Livy Manager
 pub mod config;
+/// Frontend resources
+pub mod frontend;
 /// Livy Manager
 pub mod livy_manager;
 /// HTTP server

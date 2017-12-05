@@ -1,9 +1,10 @@
 use config::Config;
+use frontend::html::index::INDEX;
 use futures;
 use futures::Stream;
 use futures::future::Future;
 use hyper;
-use hyper::{Body, Chunk};
+use hyper::{Body, Chunk, Headers, Method, StatusCode};
 use hyper::server::{Request, Response, Service};
 
 /// Livy Manager
@@ -27,9 +28,34 @@ impl Service for LivyManager {
     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
 
     fn call(&self, req: Request) -> Self::Future {
-        let mut response = Response::new();
-        let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from("Hello, Livy Manager"));
-        response.set_body(body);
-        Box::new(futures::future::ok(response))
+        let res = match (req.method(), req.path()) {
+            (&Method::Get, "/") => {
+                index(&req)
+            },
+            _ => {
+                not_found(&req)
+            }
+        };
+
+        Box::new(futures::future::ok(res))
     }
+}
+
+fn index(req: &Request) -> Response<Box<Stream<Item=Chunk, Error=hyper::Error>>> {
+    let mut headers = Headers::new();
+    headers.append_raw("Cache-Control", "private, no-store, no-cache, must-revalidate");
+    headers.append_raw("Connection", "keep-alive");
+    headers.append_raw("Content-Type", "text/html; charset=utf-8");
+
+    let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from(INDEX));
+
+    Response::new().with_headers(headers).with_body(body)
+}
+
+fn not_found(_: &Request) -> Response<Box<Stream<Item=Chunk, Error=hyper::Error>>> {
+    let mut res = Response::new();
+
+    res.set_status(StatusCode::NotFound);
+
+    res
 }

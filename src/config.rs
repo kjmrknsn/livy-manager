@@ -5,6 +5,7 @@ use toml;
 /// Configuration for Livy Manager
 #[derive(Clone, Debug, Deserialize)]
 pub struct Config {
+    pub livy_client: LivyClient,
     pub http: HTTP,
 }
 
@@ -16,6 +17,14 @@ impl Config {
         f.read_to_string(&mut contents).unwrap();
         toml::from_str(contents.as_str()).unwrap()
     }
+}
+
+/// Configuration for the Livy client
+#[derive(Clone, Debug, Deserialize)]
+pub struct LivyClient {
+    pub url: String,
+    pub gssnegotiate: Option<bool>,
+    pub username: Option<String>,
 }
 
 /// Configuration for HTTP

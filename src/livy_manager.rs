@@ -6,16 +6,26 @@ use futures::future::Future;
 use hyper;
 use hyper::{Body, Chunk, Headers, Method, StatusCode};
 use hyper::server::{Request, Response, Service};
+use livy::v0_4_0::Client;
+type LivyManagerResponse = Response<Box<Stream<Item=Chunk, Error=hyper::Error>>>;
 
 /// Livy Manager
 pub struct LivyManager {
+    client: Client,
     conf: Config
 }
 
 impl LivyManager {
     /// Creates a new `LivyManger`.
     pub fn new(conf: Config) -> LivyManager {
+        let client = Client::new(
+            &conf.livy_client.url,
+            conf.livy_client.gssnegotiate.clone(),
+            conf.livy_client.username.clone(),
+        );
+
         LivyManager {
+            client,
             conf,
         }
     }
@@ -23,7 +33,7 @@ impl LivyManager {
 
 impl Service for LivyManager {
     type Request = Request;
-    type Response = Response<Box<Stream<Item=Chunk, Error=Self::Error>>>;
+    type Response = LivyManagerResponse;
     type Error = hyper::Error;
     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
 
@@ -32,6 +42,9 @@ impl Service for LivyManager {
             (&Method::Get, "/") => {
                 index(&req)
             },
+            (&Method::Get, "/api/sessions") => {
+                get_sessions(&req)
+            }
             _ => {
                 not_found(&req)
             }
@@ -41,7 +54,7 @@ impl Service for LivyManager {
     }
 }
 
-fn index(req: &Request) -> Response<Box<Stream<Item=Chunk, Error=hyper::Error>>> {
+fn index(req: &Request) -> LivyManagerResponse {
     let mut headers = Headers::new();
     headers.append_raw("Cache-Control", "private, no-store, no-cache, must-revalidate");
     headers.append_raw("Connection", "keep-alive");
@@ -52,10 +65,10 @@ fn index(req: &Request) -> Response<Box<Stream<Item=Chunk, Error=hyper::Error>>>
     Response::new().with_headers(headers).with_body(body)
 }
 
-fn not_found(_: &Request) -> Response<Box<Stream<Item=Chunk, Error=hyper::Error>>> {
-    let mut res = Response::new();
+fn get_sessions(req: &Request) -> LivyManagerResponse {
+     Response::new().with_status(StatusCode::InternalServerError)
+}
 
-    res.set_status(StatusCode::NotFound);
-
-    res
+fn not_found(_: &Request) -> LivyManagerResponse {
+    Response::new().with_status(StatusCode::NotFound)
 }

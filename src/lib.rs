@@ -4,6 +4,7 @@
 extern crate argparse;
 extern crate futures;
 extern crate hyper;
+extern crate livy;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;

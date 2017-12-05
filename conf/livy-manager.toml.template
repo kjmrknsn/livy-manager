@@ -1,2 +1,8 @@
+[livy_client]
+url = "http://example.com:8998"
+# gssnegotiate = true
+# username = "livy"
+
 [http]
 addr = "127.0.0.1:9480"
+

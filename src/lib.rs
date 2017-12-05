@@ -2,9 +2,19 @@
 //! Web UI for Managing Apache Livy Sessions
 
 extern crate argparse;
+extern crate futures;
+extern crate hyper;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+extern crate toml;
 
 /// Command-line arguments
 pub mod cmd_args;
+/// Configuration for Livy Manager
+pub mod config;
+/// Livy Manager
+pub mod livy_manager;
 /// HTTP server
 pub mod server;
 

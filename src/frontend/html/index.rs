@@ -1,4 +1,4 @@
-pub const INDEX: &'static str = r#"
+pub const INDEX: &'static str = r##"
 <!doctype html>
 <html lang="en">
   <head>
@@ -29,7 +29,7 @@ pub const INDEX: &'static str = r#"
     <div class="container">
         <div class="row">
             <h4>Active Sessions</h4>
-            <table class="table table-hover table-sm">
+            <table class="table table-striped table-hover table-sm">
               <thead class="thead-light">
                 <tr>
                   <th scope="col">ID</th>
@@ -91,8 +91,23 @@ pub const INDEX: &'static str = r#"
                 return '';
             }
 
-            return '<a href="/api/kill_session?id=' + id +
-                    '" onclick="return confirm(\'Are you sure to kill #' + id + ' session?\');">kill</a>';
+            return '<a href="#" onclick="killSession(\'' + id + '\');">kill</a>';
+        }
+
+        function killSession(id) {
+            if (!confirm('Are you sure to kill the session ' + id + '?')) {
+                return;
+            }
+
+            $.ajax({
+                url: '/api/sessions/' + id,
+                method: 'DELETE',
+                contentType: 'application/json',
+            }).done(function() {
+                alert('done');
+            }).fail(function() {
+                alert('Failed to kill the session.');
+            });
         }
 
         $(function() {
@@ -116,4 +131,4 @@ pub const INDEX: &'static str = r#"
     </script>
   </body>
 </html>
-"#;
+"##;

@@ -45,7 +45,6 @@ pub const INDEX: &'static str = r##"
                 <tr>
                   <th scope="col">ID</th>
                   <th scope="col">App ID</th>
-                  <th scope="col">Owner</th>
                   <th scope="col">Proxy User</th>
                   <th scope="col">Kind</th>
                   <th scope="col">State</th>
@@ -131,7 +130,6 @@ pub const INDEX: &'static str = r##"
                         '<tr>' +
                             '<td>' + fmtStr(session.id)                           + '</td>' +
                             '<td>' + appIdLink(session.appId, session.appInfo)    + '</td>' +
-                            '<td>' + fmtStr(session.owner)                        + '</td>' +
                             '<td>' + fmtStr(session.proxyUser)                    + '</td>' +
                             '<td>' + fmtStr(session.kind)                         + '</td>' +
                             '<td>' + fmtStr(session.state)                        + '</td>' +

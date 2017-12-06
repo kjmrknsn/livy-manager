@@ -238,7 +238,20 @@ fn get_sessions(client: &livy::client::Client, check_user_session: bool, user_se
         None => Vec::new(),
     };
 
-    let sessions = sessions.iter_mut().map(|session| {
+    let (uid, is_admin) = match user_session {
+        Some(user_session) => (user_session.uid.as_str(), user_session.is_admin),
+        None => ("", false),
+    };
+
+    let sessions = sessions.iter_mut().filter(|ref session| {
+        if !check_user_session || is_admin {
+            return true;
+        }
+        match session.proxy_user {
+            Some(ref proxy_user) => proxy_user == uid,
+            None => false,
+        }
+    }).map(|session| {
         session.log = None;
         session
     }).collect::<Vec<_>>();
@@ -254,14 +267,33 @@ fn get_sessions(client: &livy::client::Client, check_user_session: bool, user_se
 }
 
 fn kill_session(client: &livy::client::Client, id: &str, check_user_session: bool, user_session: Option<&UserSession>) -> LivyManagerResult {
-    if check_user_session && user_session.is_none() {
-        return Ok(Response::new().with_status(StatusCode::Unauthorized));
-    }
-
     let id = match id.parse() {
         Ok(id) => id,
         Err(err) => return Err(format!("{}", err)),
     };
+
+    if check_user_session {
+        match user_session {
+            Some(user_session) => {
+                if !user_session.is_admin {
+                    match client.get_session(id) {
+                        Ok(session) => {
+                            match session.proxy_user {
+                                Some(proxy_user) => {
+                                    if proxy_user != user_session.uid {
+                                        return Ok(Response::new().with_status(StatusCode::Unauthorized));
+                                    }
+                                },
+                                None => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
+                            }
+                        },
+                        Err(_) => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
+                    }
+                }
+            },
+            None => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
+        }
+    }
 
     match client.kill_session(id) {
         Ok(_) => {

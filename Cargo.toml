@@ -28,3 +28,7 @@ serde_json = "1.0"
 time = "0.1"
 toml = "0.4"
 uuid = { version = "0.5", features = ["v4"] }
+
+[[bin]]
+name = "livy-manager"
+path = "src/main.rs"

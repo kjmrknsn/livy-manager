@@ -6,7 +6,8 @@ use futures::future::Future;
 use hyper;
 use hyper::{Body, Chunk, Headers, Method, StatusCode};
 use hyper::server::{Request, Response, Service};
-use livy::v0_4_0::Client;
+use livy::client::Client;
+use regex::Regex;
 use serde_json;
 
 type LivyManagerResponse = Response<Box<Stream<Item=Chunk, Error=hyper::Error>>>;
@@ -46,13 +47,19 @@ impl Service for LivyManager {
             },
             (&Method::Get, "/api/sessions") => {
                 get_sessions(&req, &self.client)
-            }
-            (&Method::Get, "/api/kill_session") => {
-                println!("{:?}", req.query());
-                Ok(Response::new().with_status(StatusCode::InternalServerError))
-            }
+            },
+            (&Method::Delete, path) => {
+                let re = Regex::new(r"^/api/sessions/(?P<id>\d+)$").unwrap();
+
+                match re.captures(path) {
+                    Some(caps) => {
+                        kill_session(&req, &self.client, &caps["id"])
+                    },
+                    None => not_found(),
+                }
+            },
             _ => {
-                not_found(&req)
+                not_found()
             }
         };
 
@@ -100,7 +107,22 @@ fn get_sessions(_: &Request, client: &Client) -> LivyManagerResult {
     Ok(Response::new().with_headers(json_headers()).with_body(body))
 }
 
-fn not_found(_: &Request) -> LivyManagerResult {
+fn kill_session(_: &Request, client: &Client, id: &str) -> LivyManagerResult {
+    let id = match id.parse() {
+        Ok(id) => id,
+        Err(err) => return Err(format!("{}", err)),
+    };
+
+    match client.kill_session(id) {
+        Ok(_) => {
+            let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from("{}"));
+            Ok(Response::new().with_headers(json_headers()).with_body(body))
+        },
+        Err(err) => Err(format!("{}", err)),
+    }
+}
+
+fn not_found() -> LivyManagerResult {
     Ok(Response::new().with_status(StatusCode::NotFound))
 }
 

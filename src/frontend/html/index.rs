@@ -29,7 +29,7 @@ pub const INDEX: &'static str = r##"
     <div class="container">
         <div class="row">
             <h4>Active Sessions</h4>
-            <table class="table table-striped table-hover table-sm">
+            <table class="table table-hover table-sm">
               <thead class="thead-light">
                 <tr>
                   <th scope="col">ID</th>
@@ -104,8 +104,9 @@ pub const INDEX: &'static str = r##"
                 method: 'DELETE',
                 contentType: 'application/json',
             }).done(function() {
-                alert('done');
-            }).fail(function() {
+                alert('Session ' + id + ' was killed successfully.');
+                location.href = '/';
+            }).fail(function(d) {
                 alert('Failed to kill the session.');
             });
         }

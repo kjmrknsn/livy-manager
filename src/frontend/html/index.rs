@@ -16,6 +16,10 @@ pub const INDEX: &'static str = r##"
         .navbar-brand {
             font-size: 1.5rem;
         }
+        .navbar-text {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
         table {
             margin-top: 0.5rem;
         }
@@ -24,6 +28,13 @@ pub const INDEX: &'static str = r##"
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="/">Livy Manager</a>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav mr-auto"></ul>
+            <div class="navbar-nav navbar-right">
+                <div id="uid" class="navbar-text"></div>
+                <a class="nav-link" href="/logout">Log Out</a>
+            </div>
+        </div>
     </nav>
 
     <div class="container">
@@ -127,6 +138,12 @@ pub const INDEX: &'static str = r##"
                             '<td>' + killLink(session.id)                         + '</td>' +
                         '</tr>');
                 });
+            });
+
+            $.getJSON(
+                '/api/uid'
+            ).done(function(uid) {
+                $('#uid').text(uid);
             });
         });
     </script>

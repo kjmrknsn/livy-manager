@@ -5,6 +5,7 @@ use toml;
 /// Configuration for Livy Manager
 #[derive(Clone, Debug, Deserialize)]
 pub struct Config {
+    pub ldap: Option<LDAP>,
     pub livy_client: LivyClient,
     pub http: HTTP,
 }
@@ -17,6 +18,14 @@ impl Config {
         f.read_to_string(&mut contents).unwrap();
         toml::from_str(contents.as_str()).unwrap()
     }
+}
+
+/// Configuration for the LDAP authentication
+#[derive(Clone, Debug, Deserialize)]
+pub struct LDAP {
+    pub url: String,
+    pub user_dn: String,
+    pub admin_group_dn: String,
 }
 
 /// Configuration for the Livy client

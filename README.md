@@ -24,5 +24,5 @@ Livy Manager is a Web UI for managing [Apache Livy](https://livy.incubator.apach
 2. Deploy a Livy Manager configuration file to your server. Please see [conf/livy-manager.toml.template](https://github.com/kjmrknsn/livy-manager/blob/master/conf/livy-manager.toml.template) for its template.
 3. Run Livy Manager by executing the following command:
 ```bash
-$ /path/to/livy-mangager -c /path/to/livy-manager-configuration-file
+$ /path/to/livy-manager -c /path/to/livy-manager-configuration-file
 ```

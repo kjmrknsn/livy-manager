@@ -17,16 +17,17 @@ travis-ci = { repository = "kjmrknsn/livy-manager", branch = "master" }
 [dependencies]
 argparse = "0.2"
 iron = "0.6"
-iron-sessionstorage = "0.6"
 ldap3 = "0.5"
-livy = "0.4"
+livy = "0.5"
 params = "0.8"
 persistent = "0.4"
 router = "0.6"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
+time = "0.1"
 toml = "0.4"
+uuid = { version = "0.5", features = ["v4"] }
 
 [[bin]]
 name = "livy-manager"

@@ -143,7 +143,7 @@ pub const INDEX: &'static str = r##"
             });
 
             $.getJSON(
-                '/api/user'
+                '/api/user_session'
             ).done(function(user) {
                 if (user === null || user === undefined) {
                     return;

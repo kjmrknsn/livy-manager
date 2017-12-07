@@ -307,7 +307,7 @@ dependencies = [
 
 [[package]]
 name = "livy_manager"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "argparse 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",

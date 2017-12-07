@@ -1,6 +1,6 @@
 [package]
 name = "livy_manager"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Keiji Yoshida <kjmrknsn@gmail.com>"]
 description = "Livy Manager - Web UI for Managing Apache Livy Sessions"
 license = "MIT/Apache-2.0"

@@ -1,12 +1,17 @@
+# Optional configuration for LDAP authentication
+# Please uncomment the following lines if you would like to use LDAP authentication.
 # [ldap]
 # url = "ldap://example.com:389"
 # user_dn = "uid={},ou=user,dc=company,dc=com"
 # admin_group_dn = "cn=admin_group,ou=group,dc=company,dc=com"
 
+# Configuration for the Livy REST API client
 [livy_client]
 url = "http://example.com:8998"
+# Please uncomment the following lines if you need to communicate with Kerberized Livy service.
 # gssnegotiate = true
 # username = "livy"
 
+# Configuration for the HTTP server.
 [http]
 addr = "127.0.0.1:9480"

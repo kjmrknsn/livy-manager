@@ -40,18 +40,19 @@ pub const INDEX: &'static str = r##"
         <div class="row">
             <h4>Active Sessions</h4>
             <table class="table table-hover table-sm">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">App ID</th>
-                  <th scope="col">Proxy User</th>
-                  <th scope="col">Kind</th>
-                  <th scope="col">State</th>
-                  <th scope="col">Operation</th>
-                </tr>
-              </thead>
-              <tbody id="sessions">
-              </tbody>
+                <caption id="sessions_table_caption"></caption>
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">App ID</th>
+                        <th scope="col">Proxy User</th>
+                        <th scope="col">Kind</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Operation</th>
+                    </tr>
+                </thead>
+                <tbody id="sessions">
+                </tbody>
             </table>
         </div>
     </div>
@@ -135,6 +136,10 @@ pub const INDEX: &'static str = r##"
                             '<td>' + killLink(session.id)                         + '</td>' +
                         '</tr>');
                 });
+
+                if (sessions.length == 0) {
+                    $('#sessions_table_caption').text('No active sessions to be shown.');
+                }
             });
 
             $.getJSON(

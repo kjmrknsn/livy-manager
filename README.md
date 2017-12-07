@@ -3,11 +3,12 @@
 
 ## Abstract
 Livy Manager is a Web UI for managing [Apache Livy](https://livy.incubator.apache.org/) sessions.
+
 ![](https://raw.githubusercontent.com/kjmrknsn/livy-manager/master/img/livy-manager.png)
 
 ## Issues Livy Manager Tackles with
 * It is difficult for non-developer Livy users to monitor or kill their Livy sessions and Spark applications.
-    * They have to use a HTTP client tool like `curl` to call the Livy REST APIs.
+    * They have to use an HTTP client tool like `curl` to call the Livy REST APIs.
     * Additionally, they have to manipulate machines on which a Kerberos client is installed if the Livy service is Kerberized.
     * In some services which use Livy, there's no way to kill a Livy sessions while a Spark application is running, so users cannot stop their Spark applications when they submitted a heavy and long running application accidentally.
 

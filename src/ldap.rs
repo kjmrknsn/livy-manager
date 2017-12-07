@@ -3,36 +3,21 @@ use ldap3::{LdapConn, Scope};
 use server::UserSession;
 use std::error::Error;
 
-/// LDAP client
-#[derive(Clone)]
-pub struct Client {
-    conf: LDAP,
-}
+pub fn auth(conf: &LDAP, uid: &str, password: &str) -> Result<UserSession, Box<Error>> {
+    let ldap = LdapConn::new(conf.url.as_str())?;
 
-impl Client {
-    /// Creates a new LDAP client.
-    pub fn new(conf: LDAP) -> Client {
-        Client {
-            conf,
-        }
-    }
+    let user_dn = conf.user_dn.replace("{}", uid);
 
-    pub fn auth(&self, uid: &str, password: &str) -> Result<UserSession, Box<Error>> {
-        let ldap = LdapConn::new(self.conf.url.as_str())?;
+    ldap.simple_bind(user_dn.as_str(), password)?.success()?;
 
-        let user_dn = self.conf.user_dn.replace("{}", uid);
+    let (res, _) = ldap.search(conf.admin_group_dn.as_str(), Scope::Subtree, format!("member={}", user_dn).as_str(), Vec::<&'static str>::new())?.success()?;
 
-        ldap.simple_bind(user_dn.as_str(), password)?.success()?;
+    let is_admin = res.len() == 1;
 
-        let (res, _) = ldap.search(self.conf.admin_group_dn.as_str(), Scope::Subtree, format!("member={}", user_dn).as_str(), Vec::<&'static str>::new())?.success()?;
+    let uid = String::from(uid);
 
-        let is_admin = res.len() == 1;
-
-        let uid = String::from(uid);
-
-        Ok(UserSession {
-            uid,
-            is_admin
-        })
-    }
+    Ok(UserSession {
+        uid,
+        is_admin
+    })
 }

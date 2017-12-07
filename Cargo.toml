@@ -1,6 +1,6 @@
 [package]
 name = "livy_manager"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Keiji Yoshida <kjmrknsn@gmail.com>"]
 description = "Livy Manager - Web UI for Managing Apache Livy Sessions"
 license = "MIT/Apache-2.0"
@@ -16,18 +16,17 @@ travis-ci = { repository = "kjmrknsn/livy-manager", branch = "master" }
 
 [dependencies]
 argparse = "0.2"
-futures = "0.1"
-hyper = "0.11"
+iron = "0.6"
+iron-sessionstorage = "0.6"
 ldap3 = "0.5"
 livy = "0.4"
-percent-encoding = "1.0"
-regex = "0.2"
+params = "0.8"
+persistent = "0.4"
+router = "0.6"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
-time = "0.1"
 toml = "0.4"
-uuid = { version = "0.5", features = ["v4"] }
 
 [[bin]]
 name = "livy-manager"

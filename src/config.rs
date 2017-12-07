@@ -1,3 +1,4 @@
+use iron::typemap::Key;
 use std::fs::File;
 use std::io::prelude::*;
 use toml;
@@ -20,6 +21,10 @@ impl Config {
     }
 }
 
+impl Key for Config {
+    type Value = Self;
+}
+
 /// Configuration for the LDAP authentication
 #[derive(Clone, Debug, Deserialize)]
 pub struct LDAP {
@@ -40,4 +45,5 @@ pub struct LivyClient {
 #[derive(Clone, Debug, Deserialize)]
 pub struct HTTP {
     pub addr: String,
+    pub num_threads: usize,
 }

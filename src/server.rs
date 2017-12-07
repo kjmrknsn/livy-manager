@@ -28,7 +28,7 @@ pub fn run() {
 }
 
 /// User session
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize)]
 pub struct UserSession {
     pub uid: String,
     pub is_admin: bool,

@@ -84,8 +84,8 @@ impl Service for LivyManager {
             (&Method::Get, "/logout") => {
                 logout(self.check_user_session, user_session.as_ref(), &self.user_sessions)
             },
-            (&Method::Get, "/api/uid") => {
-                get_uid(self.check_user_session, user_session.as_ref())
+            (&Method::Get, "/api/user") => {
+                get_user(self.check_user_session, user_session.as_ref())
             },
             (&Method::Get, "/api/sessions") => {
                 get_sessions(&self.livy_client, self.check_user_session, user_session.as_ref())
@@ -194,7 +194,11 @@ fn extract_uid_password(body: &str) -> (String, String) {
 }
 
 fn logout(check_user_session: bool, user_session: Option<&UserSession>, user_sessions: &Arc<Mutex<UserSessions>>) -> LivyManagerResult {
-    if check_user_session && user_session.is_none() {
+    if !check_user_session {
+        return Ok(redirect("/", true));
+    }
+
+    if user_session.is_none() {
         return Ok(redirect("/login", true));
     }
 
@@ -203,24 +207,19 @@ fn logout(check_user_session: bool, user_session: Option<&UserSession>, user_ses
     Ok(redirect("/login", true))
 }
 
-fn get_uid(check_user_session: bool, user_session: Option<&UserSession>) -> LivyManagerResult {
+fn get_user(check_user_session: bool, user_session: Option<&UserSession>) -> LivyManagerResult {
     if check_user_session && user_session.is_none() {
         return Ok(Response::new().with_status(StatusCode::Unauthorized));
     }
 
-    let uid = match user_session {
-        Some(user_session) => user_session.uid.clone(),
-        None => "".to_string(),
-    };
+    match serde_json::to_string(&user_session) {
+        Ok(user_session) => {
+            let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from(user_session));
 
-    let uid = match serde_json::to_string(&uid) {
-        Ok(uid) => uid,
-        Err(err) => return Err(format!("{}", err)),
-    };
-
-    let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from(uid));
-
-    Ok(Response::new().with_headers(json_headers()).with_body(body))
+            Ok(Response::new().with_headers(json_headers()).with_body(body))
+        },
+        Err(err) => Err(format!("{}", err)),
+    }
 }
 
 fn get_sessions(client: &livy::client::Client, check_user_session: bool, user_session: Option<&UserSession>) -> LivyManagerResult {

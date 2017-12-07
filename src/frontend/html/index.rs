@@ -30,9 +30,8 @@ pub const INDEX: &'static str = r##"
         <a class="navbar-brand" href="/">Livy Manager</a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mr-auto"></ul>
-            <div class="navbar-nav navbar-right">
-                <div id="uid" class="navbar-text"></div>
-                <a class="nav-link" href="/logout">Log Out</a>
+            <div id="navbar_right" class="navbar-nav navbar-right">
+                <div id="user_name" class="navbar-text"></div>
             </div>
         </div>
     </nav>
@@ -139,9 +138,19 @@ pub const INDEX: &'static str = r##"
             });
 
             $.getJSON(
-                '/api/uid'
-            ).done(function(uid) {
-                $('#uid').text(uid);
+                '/api/user'
+            ).done(function(user) {
+                if (user === null || user === undefined) {
+                    return;
+                }
+
+                var userName = user.uid;
+                if (user.is_admin) {
+                    userName += ' (Admin)';
+                }
+                $('#user_name').text(userName);
+
+                $('#navbar_right').append('<a class="nav-link" href="/logout">Log Out</a>');
             });
         });
     </script>

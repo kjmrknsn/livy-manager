@@ -28,7 +28,7 @@ pub const LOGIN: &'static str = r##"
 
     <div class="container">
         <div class="row">
-            <h4>Login</h4>
+            <h4>Log In</h4>
         </div>
         <div class="row">
             <form action="/login" method="post">
@@ -40,7 +40,7 @@ pub const LOGIN: &'static str = r##"
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Log In</button>
             </form>
         </div>
     </div>

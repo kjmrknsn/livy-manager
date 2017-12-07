@@ -271,27 +271,8 @@ fn kill_session(client: &livy::client::Client, id: &str, check_user_session: boo
         Err(err) => return Err(format!("{}", err)),
     };
 
-    if check_user_session {
-        match user_session {
-            Some(user_session) => {
-                if !user_session.is_admin {
-                    match client.get_session(id) {
-                        Ok(session) => {
-                            match session.proxy_user {
-                                Some(proxy_user) => {
-                                    if proxy_user != user_session.uid {
-                                        return Ok(Response::new().with_status(StatusCode::Unauthorized));
-                                    }
-                                },
-                                None => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
-                            }
-                        },
-                        Err(_) => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
-                    }
-                }
-            },
-            None => return Ok(Response::new().with_status(StatusCode::Unauthorized)),
-        }
+    if !has_kill_session_authority(client, id, check_user_session, user_session) {
+        return Ok(Response::new().with_status(StatusCode::Unauthorized));
     }
 
     match client.kill_session(id) {
@@ -300,6 +281,34 @@ fn kill_session(client: &livy::client::Client, id: &str, check_user_session: boo
             Ok(Response::new().with_headers(json_headers()).with_body(body))
         },
         Err(err) => Err(format!("{}", err)),
+    }
+}
+
+fn has_kill_session_authority(client: &livy::client::Client, id: i64, check_user_session: bool, user_session: Option<&UserSession>) -> bool {
+    if !check_user_session {
+        return true;
+    }
+
+    if user_session.is_none() {
+        return false;
+    }
+
+    let user_session = user_session.unwrap();
+
+    if user_session.is_admin {
+        return true;
+    }
+
+    match client.get_session(id) {
+        Ok(session) => {
+            match session.proxy_user {
+                Some(proxy_user) => {
+                    proxy_user == user_session.uid
+                },
+                None => false
+            }
+        },
+        Err(_) => false,
     }
 }
 
